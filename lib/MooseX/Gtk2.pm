@@ -65,7 +65,7 @@ __END__
 
     register;
 
-And later…
+And later:
 
     use MyWindow;
 
@@ -408,15 +408,15 @@ not work.
 
 =over
 
-=item Provide C<requires_signals(@signal_names)> for roles.
+=item * Provide C<requires_signals(@signal_names)> for roles.
 
-=item Support L<Glib::Object::Subclass/INTERFACES>.
+=item * Support L<Glib::Object::Subclass/INTERFACES>.
 
-=item Allow to provide L<Glib> types other than C<Glib::Scalar>.
+=item * Allow to provide L<Glib> types other than C<Glib::Scalar>.
 
-=item Option to turn of implicit invocant signal parameter.
+=item * Option to turn of implicit invocant signal parameter.
 
-=item More tests.
+=item * More tests.
 
 =back
 
@@ -424,17 +424,17 @@ not work.
 
 =over
 
-=item L<Moose>
+=item * L<Moose>
 
-=item L<Gtk2>
+=item * L<Gtk2>
 
-=item L<Glib>
+=item * L<Glib>
 
-=item L<http://developer.gnome.org/glib/>
+=item * L<http://developer.gnome.org/glib/>
 
-=item L<http://developer.gnome.org/gtk/>
+=item * L<http://developer.gnome.org/gtk/>
 
-=item L<Glib::Object::Subclass>
+=item * L<Glib::Object::Subclass>
 
 =back
 
