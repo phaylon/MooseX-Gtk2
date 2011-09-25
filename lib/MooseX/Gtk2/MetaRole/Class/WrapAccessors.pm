@@ -2,6 +2,7 @@ use strictures 1;
 
 package MooseX::Gtk2::MetaRole::Class::WrapAccessors;
 use Moose::Role;
+use Moose::Util     qw( does_role );
 use Sub::Identify   qw( stash_name );
 
 use syntax qw( simple/v2 );
@@ -32,7 +33,7 @@ method install_get_wrapper ($method_name) {
         for my $attr_name (@attr_names) {
             my $attr = $meta->find_attribute_by_name($attr_name)
                 or $meta->throw_error("Unknown attribute '$attr_name'");
-            unless ($attr->reader or $attr->accessor) {
+            unless ($attr->is_generally_readable) {
                 $attr->throw_error(sprintf
                     q{Attribute '%s' is not readable via %s()},
                     $attr_name,
@@ -41,7 +42,7 @@ method install_get_wrapper ($method_name) {
             }
             push @gathered, $attr->get_value($instance);
         }
-        return wantarray ? shift(@gathered) : @gathered;
+        return wantarray ? @gathered : shift(@gathered);
     });
 }
 
@@ -51,7 +52,7 @@ method install_set_wrapper ($method_name) {
         for my $attr_name (keys %new_value) {
             my $attr = $meta->find_attribute_by_name($attr_name)
                 or $meta->throw_error("Unknown attribute '$attr_name'");
-            unless ($attr->writer or $attr->accessor) {
+            unless ($attr->is_generally_writable) {
                 $attr->throw_error(sprintf
                     q{Attribute '%s' is not writeable via %s()},
                     $attr_name,

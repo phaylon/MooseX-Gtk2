@@ -28,7 +28,7 @@ method as_param_spec {
         $self->name,
         $self->nickname,
         $self->documentation || '',
-        [qw( readable writable construct )],
+        [qw( readable writable )],
     );
 }
 

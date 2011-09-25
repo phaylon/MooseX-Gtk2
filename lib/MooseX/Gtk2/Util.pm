@@ -4,6 +4,7 @@ package MooseX::Gtk2::Util;
 
 use MooseX::Gtk2::Init;
 use Moose ();
+use Moose::Object;
 use Moose::Util::MetaRole;
 use Class::Load             qw( is_class_loaded load_class );
 
@@ -34,6 +35,7 @@ fun make_membrane_class ($orig_class) {
     my $plain = make_plain_membrane_meta($orig_class);
     my $meta  = setup_membrane_meta_roles($plain);
     sync_attributes($meta, $orig_class);
+    sync_signals($meta, $orig_class);
     finalize_membrane_meta($meta);
     return $meta->name;
 }
@@ -46,17 +48,31 @@ fun setup_membrane_meta_roles ($meta) {
             class       => [qw(
                 MooseX::Gtk2::MetaRole::Class::WrapAccessors
                 MooseX::Gtk2::MetaRole::Class::Destruction
+                MooseX::Gtk2::MetaRole::Class::SignalHandling
             )],
         },
     );
 }
 
+fun sync_signals ($meta, $source) {
+    for my $signal (Glib::Type->list_signals($source)) {
+        (my $name = $signal->{signal_name}) =~ s/-/_/g;
+        $meta->add_signal($name);
+    }
+}
+
 fun sync_attributes ($meta, $source) {
     for my $property ($source->list_properties) {
         (my $name = $property->{name}) =~ s{-}{_}g;
+        my %flag = map { ($_ => 1) } @{$property->{flags}||[]};
         $meta->add_attribute
             ($name,
-            is => 'bare',
+            is                      => 'bare',
+            is_generally_readable   => $flag{readable},
+            is_generally_writable   => $flag{writable},
+            traits                  => [qw(
+                MooseX::Gtk2::MetaRole::Attribute::Access
+            )],
             $source->can("get_$name")
                 ? (reader => "get_$name")
                 : (),
@@ -69,14 +85,23 @@ fun sync_attributes ($meta, $source) {
 }
 
 fun finalize_membrane_meta ($meta) {
-    $meta->install_accessor_wrappers;
-    $meta->make_immutable(replace_constructor => 1, replace_destructor => 0);
     my ($parent) = $meta->superclasses;
+    $meta->install_accessor_wrappers;
+    ensure_compatibility_methods($meta);
+    $meta->make_immutable(
+        replace_constructor => 1,
+        replace_destructor  => 0,
+    );
     Glib::Type->register_object(
         $parent,
         $meta->name,
     );
     return 1;
+}
+
+fun ensure_compatibility_methods ($meta) {
+    $meta->add_method($_ => Moose::Object->can($_))
+        for qw( BUILDALL BUILDARGS );
 }
 
 fun make_plain_membrane_meta ($orig_class) {
