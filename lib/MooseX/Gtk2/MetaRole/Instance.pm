@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Glib-aware instance management
+
 package MooseX::Gtk2::MetaRole::Instance;
 use Moose::Role;
 use Glib;

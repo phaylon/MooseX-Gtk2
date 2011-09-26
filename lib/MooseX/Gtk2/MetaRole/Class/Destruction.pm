@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Handle DEMOLISH emulation
+
 package MooseX::Gtk2::MetaRole::Class::Destruction;
 use Moose::Role;
 use Glib;

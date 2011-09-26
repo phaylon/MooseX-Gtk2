@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Generic signal handling
+
 package MooseX::Gtk2::MetaRole::SignalHandling;
 use Moose::Role;
 use MooseX::Types::Moose    qw( HashRef CodeRef );

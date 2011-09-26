@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Internal type library
+
 package MooseX::Gtk2::Types;
 
 use namespace::clean;

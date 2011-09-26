@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Signal declaration sugar
+
 package MooseX::Gtk2::Sugar::Signals;
 
 use Moose ();
@@ -20,3 +22,12 @@ fun signal ($meta, $name, @args) {
 }
 
 1;
+
+__END__
+
+=head1 DESCRIPTION
+
+Used to setup a C<signal> keyword in packages built with L<MooseX::Gtk2>
+or L<MooseX::Gtk2::Role>.
+
+=cut

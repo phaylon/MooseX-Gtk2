@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Attribute needs to be registered with Glib
+
 package MooseX::Gtk2::MetaRole::Attribute::Register;
 use Moose::Role;
 use Glib;

@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Turn a MooseX::Gtk2 class into a Glib class
+
 package MooseX::Gtk2::MetaRole::Class::MakeGObject;
 use Moose::Role;
 use Moose::Util         qw( does_role );
@@ -24,7 +26,6 @@ around superclasses (@classes) {
 }
 
 method make_gobject {
-    $self->install_value_management;
     $self->make_immutable(replace_constructor => 1, replace_destructor => 0)
         unless $self->is_immutable;
     my ($parent) = $self->superclasses;
@@ -58,52 +59,6 @@ method _registerable_properties {
 before make_mutable {
     $self->throw_error('GObject classes cannot be made mutable again')
         if $self->is_gobject;
-}
-
-method install_value_management {
-#    warn "WRAPPERS";
-#    $self->add_method(GET_PROPERTY => $self->_value_getter_callback);
-#    $self->add_method(SET_PROPERTY => $self->_value_setter_callback);
-}
-
-method _value_setter_callback {
-    return method ($prop, $value) {
-        my $name = $prop->get_name;
-        warn "SET $name TO $value";
-        my $attr = $self->meta->find_attribute_by_name($name);
-        return $self->{$name} = $value
-            unless $attr->has_type_constraint;
-        my $tc = $attr->type_constraint;
-        return $self->{$name} = $tc->assert_coerce($value)
-            if $attr->should_coerce and $tc->has_coercion;
-        $tc->assert_valid($value);
-        return $self->{$name} = $value;
-    };
-}
-
-method _value_getter_callback {
-    return method ($prop) {
-        my $name = $prop->get_name;
-        warn "GET $name";
-        if (exists $self->{$name}) {
-            return $self->{$name};
-        }
-        my $attr = $self->meta->find_attribute_by_name($name);
-        return undef
-            unless $attr->is_lazy;
-        if ($attr->has_default) {
-            my $value = $self->{$name} = $attr->default($self);
-            $self->notify($name);
-            return $value;
-        }
-        elsif ($attr->has_builder) {
-            my $builder = $attr->builder;
-            my $value = $self->{$name} = $self->$builder;
-            $self->notify($name);
-            return $value;
-        }
-        return undef;
-    };
 }
 
 1;

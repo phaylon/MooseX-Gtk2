@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Manage generic attribute access
+
 package MooseX::Gtk2::MetaRole::Class::WrapAccessors;
 use Moose::Role;
 use Moose::Util     qw( does_role );

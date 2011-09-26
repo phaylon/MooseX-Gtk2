@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Class metaclass signal handling
+
 package MooseX::Gtk2::MetaRole::Class::SignalHandling;
 use Moose::Role;
 

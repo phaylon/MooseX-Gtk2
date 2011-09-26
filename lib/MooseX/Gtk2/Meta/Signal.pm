@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Signal metaclass
+
 package MooseX::Gtk2::Meta::Signal;
 use Moose;
 use MooseX::Types::Common::String   qw( NonEmptySimpleStr );
@@ -97,3 +99,11 @@ method _glib_param_types {
 }
 
 1;
+
+__END__
+
+=head1 DESCRIPTION
+
+This class represents a L<Glib> signal in terms of the L<Moose> MOP.
+
+=cut

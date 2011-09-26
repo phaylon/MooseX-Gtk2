@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Apply the signals declared in a role
+
 package MooseX::Gtk2::MetaRole::Application::ApplySignals;
 use Moose::Role;
 use Moose::Util qw( does_role );

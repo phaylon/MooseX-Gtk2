@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Internal utility functions
+
 package MooseX::Gtk2::Util;
 
 use MooseX::Gtk2::Init;

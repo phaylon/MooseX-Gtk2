@@ -1,5 +1,7 @@
 use strictures 1;
 
+# ABSTRACT: Determine generic attribute access privileges
+
 package MooseX::Gtk2::MetaRole::Attribute::Access;
 use Moose::Role;
 use MooseX::Types::Moose qw( Bool );
